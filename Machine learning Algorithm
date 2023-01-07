@@ -1,0 +1,40 @@
+# Machine-Learning-
+# importing all the libraries
+Machine learning codes
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_error
+
+# uploading trainig dataset in jupyter notebook
+MedValData = pd.read_csv('train.csv')
+MedValData.description()
+
+# extracting values that we are going to predict using machine learning
+y = MedValData.MedHouseVal
+
+#Creating a dataframe that contains the independent variables
+Med_features = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude']
+x = MedValData[Med_features]
+x.describe()
+
+# Applying the algorithm on data
+Medvalmodel = DecisionTreeRegressor(random_state=2)
+Medvalmodel.fit(x, y)
+
+# calculating mean sqaure error 
+medvalmodel = Medvalmodel.predict(x)
+mean_absolute_error(y, medvalmodel)
+
+# Applying it on test data to get predictions
+test_data = pd.read_csv('test.csv')
+test_features = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude']
+x_test = test_data[test_features]
+x_test.describe()
+predictions = Medvalmodel.predict(x_test)
+my_pred = pd.DataFrame(predictions, columns=['Predictions'])
+q = test_data.id
+my_pred['ID'] = q
+my_pred = my_pred[['ID','Predictions']]
+my_pred.to_csv('Predictions.csv')
